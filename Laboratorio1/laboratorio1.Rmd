@@ -1,0 +1,80 @@
+---
+title: "Lab1"
+output: rmarkdown::github_document
+date: "2022-08-03"
+---
+
+```{r}
+# cargar librerias para R
+library(readxl)
+library(writexl)
+library(readr)
+library(tidyverse)
+library(tidytext)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# lectura de archivos
+enero <- readxl::read_excel('Datos/01-2018.xlsx')
+febrero <- readxl::read_excel('Datos/02-2018.xlsx')
+marzo <- readxl::read_excel('Datos/03-2018.xlsx')
+abril <- readxl::read_excel('Datos/04-2018.xlsx')
+mayo <- readxl::read_excel('Datos/05-2018.xlsx')
+junio <- readxl::read_excel('Datos/06-2018.xlsx')
+julio <- readxl::read_excel('Datos/07-2018.xlsx')
+agosto <- readxl::read_excel('Datos/08-2018.xlsx')
+septiembre <- readxl::read_excel('Datos/09-2018.xlsx')
+octubre <- readxl::read_excel('Datos/10-2018.xlsx')
+noviembre <- readxl::read_excel('Datos/11-2018.xlsx')
+```
+
+```{r}
+# se agrega columna de la fecha segun cada archivo
+enero$Fecha <- '01-2018'
+febrero$Fecha <- '02-2018'
+marzo$Fecha <- '03-2018'
+abril$Fecha <- '04-2018'
+mayo$Fecha <- '05-2018'
+junio$Fecha <- '06-2018'
+julio$Fecha <- '07-2018'
+agosto$Fecha <- '08-2018'
+septiembre$Fecha <- '09-2018'
+octubre$Fecha <- '10-2018'
+noviembre$Fecha <- '11-2018'
+```
+
+```{r}
+# limpieza de datos, solo las columnas que pide
+keeps <- c("COD_VIAJE", "CLIENTE", "UBICACION", "CANTIDAD", "PILOTO", "Q", "CREDITO", "UNIDAD", "Fecha")
+enero <- enero[keeps]
+febrero <- febrero[keeps]
+marzo <- marzo[keeps]
+abril <- abril[keeps]
+mayo <- mayo[keeps]
+junio <- junio[keeps]
+julio <- julio[keeps]
+agosto <- agosto[keeps]
+septiembre <- septiembre[keeps]
+octubre <- octubre[keeps]
+noviembre <- noviembre[keeps]
+```
+
+```{r}
+# unificacion de datos
+df_list <- list(enero, febrero, marzo, abril, mayo, junio,
+                julio, agosto, septiembre, octubre, noviembre)
+
+final <- Reduce(function(x, y) merge(x, y, all=TRUE), df_list) 
+final
+```
+
+```{r}
+# exportar excel
+write_xlsx(final, "final_lab1.xls")
+```
+
