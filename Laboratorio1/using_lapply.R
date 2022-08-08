@@ -1,3 +1,5 @@
+#ejemplo
+
 generate_df <- function(x, tamanio){
   return(
     data.frame(
@@ -8,5 +10,5 @@ generate_df <- function(x, tamanio){
 }
 
 lista <- lapply(1:4, generate_df, tamanio = 4)
-
+lista
 merge
