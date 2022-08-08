@@ -6650,10 +6650,10 @@ lista_3v
 ```
 
     ## [[1]]
-    ##   a b c
-    ## 1 d 7 d
-    ## 2 a 5 a
-    ## 3 d 8 m
+    ##   a  b c
+    ## 1 a 10 a
+    ## 2 o  1 p
+    ## 3 k  8 t
 
 ``` r
 # obtener la moda
@@ -6668,10 +6668,48 @@ lapply(to_mode, Mode)
 ```
 
     ## $a
-    ## [1] "d"
+    ## [1] "a"
     ## 
     ## $b
-    ## [1] 7
+    ## [1] 10
     ## 
     ## $c
-    ## [1] "d"
+    ## [1] "a"
+
+``` r
+# problema 3 leer archivo de la sat usando funcion delim
+vehiculos_2019 <- read_delim("Datos/INE_PARQUE_VEHICULAR_080219.txt", delim = "|")
+```
+
+    ## New names:
+    ## • `` -> `...11`
+
+    ## Warning: One or more parsing issues, see `problems()` for details
+
+    ## Rows: 2435294 Columns: 11
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: "|"
+    ## chr (8): MES, NOMBRE_DEPARTAMENTO, NOMBRE_MUNICIPIO, MODELO_VEHICULO, LINEA_...
+    ## dbl (2): ANIO_ALZA, CANTIDAD
+    ## lgl (1): ...11
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+
+``` r
+head(vehiculos_2019)
+```
+
+    ## # A tibble: 6 × 11
+    ##   ANIO_A…¹ MES   NOMBR…² NOMBR…³ MODEL…⁴ LINEA…⁵ TIPO_…⁶ USO_V…⁷ MARCA…⁸ CANTI…⁹
+    ##      <dbl> <chr> <chr>   <chr>   <chr>   <chr>   <chr>   <chr>   <chr>     <dbl>
+    ## 1     2007 05    HUEHUE… "HUEHU… 2007    SPORT1… MOTO    MOTOCI… ASIA H…       1
+    ## 2     2007 05    EL PRO… "EL JI… 2007    BT-50 … PICK UP PARTIC… MAZDA         1
+    ## 3     2007 05    SAN MA… "OCOS"  2007    JL125   MOTO    MOTOCI… KINLON        1
+    ## 4     2007 05    ESCUIN… "SAN J… 2006    JL125T… MOTO    MOTOCI… JIALING       1
+    ## 5     2007 05    JUTIAPA "MOYUT… 2007    JH100-2 MOTO    MOTOCI… JIALING       1
+    ## 6     2007 05    GUATEM… "FRAIJ… 1997    TACOMA… PICK UP PARTIC… TOYOTA        1
+    ## # … with 1 more variable: ...11 <lgl>, and abbreviated variable names
+    ## #   ¹​ANIO_ALZA, ²​NOMBRE_DEPARTAMENTO, ³​NOMBRE_MUNICIPIO, ⁴​MODELO_VEHICULO,
+    ## #   ⁵​LINEA_VEHICULO, ⁶​TIPO_VEHICULO, ⁷​USO_VEHICULO, ⁸​MARCA_VEHICULO, ⁹​CANTIDAD
+    ## # ℹ Use `colnames()` to see all variable names

@@ -108,3 +108,9 @@ lapply(to_mode, Mode)
 ```
 
 
+```{r}
+# problema 3 leer archivo de la sat usando funcion delim
+vehiculos_2019 <- read_delim("Datos/INE_PARQUE_VEHICULAR_080219.txt", delim = "|")
+head(vehiculos_2019)
+```
+
