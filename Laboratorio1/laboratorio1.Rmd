@@ -107,3 +107,4 @@ to_mode <- as.data.frame(lista_3v)
 lapply(to_mode, Mode)
 ```
 
+

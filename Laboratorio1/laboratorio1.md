@@ -6632,3 +6632,46 @@ final
 # exportar excel
 write_xlsx(final, "final_lab1.xls")
 ```
+
+``` r
+# problema 2 generando lista de 3 vectores con elementos "random"
+generate_df <- function(x, tamanio){
+  return(
+    data.frame(
+      a = sample(letters, size = tamanio, replace = TRUE),
+      b = sample(1:10, size = tamanio, replace = TRUE),
+      c = sample(letters, size = tamanio, replace = TRUE)
+    )
+  )
+}
+
+lista_3v <- lapply(1, generate_df, tamanio = 3)
+lista_3v
+```
+
+    ## [[1]]
+    ##   a b c
+    ## 1 d 7 d
+    ## 2 a 5 a
+    ## 3 d 8 m
+
+``` r
+# obtener la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+to_mode <- as.data.frame(lista_3v)
+
+lapply(to_mode, Mode)
+```
+
+    ## $a
+    ## [1] "d"
+    ## 
+    ## $b
+    ## [1] 7
+    ## 
+    ## $c
+    ## [1] "d"
