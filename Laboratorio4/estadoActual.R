@@ -21,7 +21,7 @@ Newdf
 # rename de columnas
 names(Newdf)[11]<- "CLIENTE"
 names(Newdf)[12]<- "MOTIVO"
-names(Newdf)[13]<- "MOTIVO2"
+names(Newdf)[13]<- "OTRO"
 Newdf
 
 # quitar ñ y letras no ingles
