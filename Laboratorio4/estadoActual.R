@@ -45,7 +45,7 @@ EnviosporMes <- df %>%
     hchart("column", hcaes(x =  MES, y = viajes)) %>%
     hc_title(text = "<b>Cantidad de Viajes por Mes en el 2017</b>") %>%
     hc_subtitle(text = "<i>Mayo fue el mes con mayor cantidad de viajes, mientras que marzo fue el mes con menor cantidad de viajes.</i>")
-#EnviosporMes
+EnviosporMes
 
 Ubicaciones <- df %>%
   select(COD_VIAJE, UBICACION) %>%
@@ -54,7 +54,7 @@ Ubicaciones <- df %>%
   hchart("bar", hcaes(x =  UBICACION, y = viajes), name = "cantidad de envios") %>%
   hc_title(text = "<b>Cantidad de Viajes por ubicacion</b>") %>%
   hc_subtitle(text = "<i>La Ubicacion de 76002 realizo una mayor cantidad de envios.</i>")
-#Ubicaciones
+Ubicaciones
 
 TransporteRecurrido <- df %>%
   select(COD_VIAJE, UNIDAD) %>%
@@ -62,8 +62,8 @@ TransporteRecurrido <- df %>%
   summarise(viajes = n_distinct(COD_VIAJE)) %>%
   hchart("bar", hcaes(x =  UNIDAD, y = viajes), name = "cantidad de envios") %>%
   hc_title(text = "<b>Cantidad de Viajes por Unidad de Transporte</b>") %>%
-  hc_subtitle(text = "<i>La Ubicacion de 76002 realizo una mayor cantidad de envios.</i>")
-#TransporteRecurrido
+  hc_subtitle(text = "<i>Camión Grande realizó la mayoría de entregas mientras que Panel realizó la menor cantidad de.</i>")
+TransporteRecurrido
 
 IngresoAlMes <- (Newdf %>% 
                   group_by(MES) %>%
@@ -96,7 +96,8 @@ ggplot(TipoDeViaje, aes(fill=MOTIVO, y=TipoDeViaje$motivo, x=TipoDeViaje$UNIDAD)
 
 CreditoPorcliente <- Newdf %>%
                       group_by(CLIENTE)  %>% 
-                      summarise(credi=sum(CREDITO))
+                      summarise(credi=sum(CREDITO)) %>% 
+                      arrange(-credi)
 CreditoPorcliente$CLIENTE <- str_sub(CreditoPorcliente$CLIENTE, 1, 9)
 ggplot(Credito_cliente, aes(y=credi, x=CLIENTE)) + 
   geom_bar(position="stack", stat="identity", fill="#42A7E3")+
