@@ -121,6 +121,8 @@ parcial_anonimo %>%
 
 ```{r }
 names(parcial_anonimo)[10] <- 'UnidadesPlaza'
+names(parcial_anonimo)[9] <- 'CanalVenta'
+names(parcial_anonimo)[2] <- 'CodigoMaterial'
 parcial_anonimo %>%
   group_by(Territorio) %>%
   filter(Venta<0)
