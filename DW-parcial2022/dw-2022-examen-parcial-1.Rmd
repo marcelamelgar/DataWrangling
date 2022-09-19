@@ -114,18 +114,20 @@ parcial_anonimo %>%
 ## B
 
 ```{r}
+names(parcial_anonimo)[10] <- 'UnidadesPlaza'
+names(parcial_anonimo)[9] <- 'CanalVenta'
+names(parcial_anonimo)[2] <- 'CodigoMaterial'
 parcial_anonimo %>%
   arrange(Venta)
 ```
 
 
 ```{r }
-names(parcial_anonimo)[10] <- 'UnidadesPlaza'
-names(parcial_anonimo)[9] <- 'CanalVenta'
-names(parcial_anonimo)[2] <- 'CodigoMaterial'
-parcial_anonimo %>%
-  group_by(Territorio) %>%
-  filter(Venta<0)
+perdidas <- parcial_anonimo %>%
+  distinct(Territorio, Venta) %>%
+  filter(Venta<0) %>%
+  
+perdidas
 
 ```
 
