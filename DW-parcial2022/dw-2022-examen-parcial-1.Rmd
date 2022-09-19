@@ -86,6 +86,7 @@ A. De los clientes que están en más de un país,¿cuál cree que es el más re
 
 B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios cuyas pérdidas sean "considerables". Bajo su criterio, ¿cuáles son estos territorios y por qué ya no debemos operar ahí?
 
+* RESPUESTA: Considero que los territorios donde ya no se deberia operar son '0bfe69a0' porque a pesar que tiene pocas perdidas, tiene muy pocos ingresos para la empresa. Asi como tambien '0320288f' pues es el mismo caso que el terrirorio anterior. Luego esta '8682908b' que tiene la mayor cantidad de de perdidas dentro de los territorios con menores ganancias.
 
 ### I. Preguntas teóricas
 
@@ -94,6 +95,7 @@ B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios 
 
 ```{r}
 library(dplyr)
+library(formattable)
 parcial_anonimo <- readRDS("parcial_anonimo.rds")
 #parcial_anonimo
 ```
@@ -124,10 +126,29 @@ parcial_anonimo %>%
 
 ```{r }
 perdidas <- parcial_anonimo %>%
-  distinct(Territorio, Venta) %>%
+  group_by(Territorio) %>%
   filter(Venta<0) %>%
-  
+  summarise(totPerdidas = sum(Venta)) %>%
+  arrange(totPerdidas)
 perdidas
 
 ```
+
+```{r}
+ganancias <- parcial_anonimo %>%
+  group_by(Territorio) %>%
+  filter(Venta>0) %>%
+  summarise(totGanancias = sum(Venta)) %>%
+  arrange(totGanancias)
+ganancias
+```
+
+```{r}
+neto <- left_join(perdidas,ganancias, by = "Territorio")
+
+neto %>%
+  mutate(sum = rowSums(across(where(is.numeric)))) %>%
+  arrange(sum)
+```
+
 
