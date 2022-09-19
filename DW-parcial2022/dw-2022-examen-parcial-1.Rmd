@@ -66,6 +66,14 @@ paste0("Mis preguntas a resolver son: ",paste0(preguntas,collapse = ", "))
 Extra: ¿Cuántos posibles exámenes de 5 preguntas se pueden realizar utilizando como banco las diez acá presentadas?
 (responder con código de R.)
 
+```{r}
+library(gtools)
+#permutations(n=10,r=5,v=1:10)
+res <- permutations(n=10,r=5,v=1:10)
+paste('Los posibles examenes de 5 preguntas que se pueden realizar son:', nrow(res), sep=" ")
+#print (nrow(res))
+```
+
 
 ## Sección II Preguntas prácticas.
 
