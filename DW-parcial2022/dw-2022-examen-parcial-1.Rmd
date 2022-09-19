@@ -82,13 +82,9 @@ paste('Los posibles examenes de 5 preguntas que se pueden realizar son:', nrow(r
 
 A. De los clientes que están en más de un país,¿cuál cree que es el más rentable y por qué?
 
+* RESPUESTA: Considero que el cliente mas rentable es 'c53868a0' porque tiene la mayor cantidad de ventas totales generadas ($196.72) y se encuentra operando en 2 diferentes paises. (el maximo de paises en lo que los clientes operan es de 2 paises por lo que su rentabilidad en ventas es mayor tomando este factor como igual). Esto es tomando en cuenta todos los años de operacion en el mercado.
+
 B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios cuyas pérdidas sean "considerables". Bajo su criterio, ¿cuáles son estos territorios y por qué ya no debemos operar ahí?
-
-
-
-
-
-
 
 
 ### I. Preguntas teóricas
@@ -96,8 +92,19 @@ B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios 
 
 ## A
 
+```{r}
+library(dplyr)
+parcial_anonimo <- readRDS("parcial_anonimo.rds")
+#parcial_anonimo
+```
+
+
 ```{r }
-###resuelva acá
+parcial_anonimo %>%
+  group_by(Cliente, Venta) %>%
+  summarise(paises = n_distinct(Pais)) %>%
+  filter(paises > 1) %>%
+  summarise(totVentas = sum(Venta))
 
 ```
 
@@ -106,8 +113,17 @@ B. Estrategia de negocio ha decidido que ya no operará en aquellos territorios 
 
 ## B
 
+```{r}
+parcial_anonimo %>%
+  arrange(Venta)
+```
+
+
 ```{r }
-###resuelva acá
+names(parcial_anonimo)[10] <- 'UnidadesPlaza'
+parcial_anonimo %>%
+  group_by(Territorio) %>%
+  filter(Venta<0)
 
 ```
 
