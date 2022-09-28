@@ -1,0 +1,58 @@
+---
+title: "Laboratorio5"
+output: html_document
+date: "2022-09-28"
+output: rmarkdown::github_document
+---
+
+# Predecir un Eclipse Solar
+
+```{r echo=FALSE}
+library(lubridate)
+library(dplyr)
+```
+
+```{r}
+# variables eclipse historico, saros, synodic month
+
+Eclipse2017 <- mdy_hms("Aug 27 2017 18:26:40")
+SynodicMonth <- days(29) + hours(12) + minutes(44) + seconds(3)
+Saros <- 223 * SynodicMonth
+
+```
+
+```{r}
+# proximo eclipse
+
+SiguienteEclipse <- Eclipse2017 + Saros
+paste0("El siguiente eclipse va a ocurrir en: ",SiguienteEclipse)
+
+```
+
+
+# Agrupaciones y Operaciones con fechas
+
+```{r}
+data <- readxl::read_excel("data.xlsx")
+View(data)
+```
+
+```{r}
+
+```
+
+
+# Signo Zodiacal
+
+```{r}
+signo <- function(fcumple){
+  fcumple <- mdy(fcumple)
+  if(fcumple ){
+    
+  }
+}
+```
+
+
+
+# Flights
