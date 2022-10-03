@@ -10,6 +10,8 @@ output: rmarkdown::github_document
 ```{r echo=FALSE}
 library(lubridate)
 library(dplyr)
+library(nycflights13)
+library(dplyr)
 ```
 
 ```{r}
@@ -34,11 +36,65 @@ paste0("El siguiente eclipse va a ocurrir en: ",SiguienteEclipse)
 
 ```{r}
 data <- readxl::read_excel("data.xlsx")
-View(data)
+#View(data)
 ```
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
+# limpieza de datos
+names(data) = tolower(names(data))
+names(data) = gsub("ó", "o", names(data))
+names(data) = gsub(" ", "_", names(data))
 
+data <- data %>%
+    mutate(fechanumerica = as.Date(as.numeric(fecha_creacion), origin ="1899-12-30"))
+data <- data %>%
+    mutate(fechafinal = dmy(fecha_creacion))
+data <- data %>%
+    mutate(fecha = paste(fechanumerica,fechafinal,sep=""))
+data <- data %>%
+    mutate(fecha = gsub("NA","",fecha))
+data <- data %>%
+    mutate(fecha = ymd(fecha))
+data <- data %>%
+    mutate(fecha_creacion = make_datetime(year(fecha),
+                                      month(fecha),
+                                      day(fecha),
+                                      hour(hora_creacion),
+                                      minute(hora_creacion), 
+                                      second(hora_creacion)))
+
+data <- data %>%
+    mutate(fechanumerica = as.Date(as.numeric(fecha_final), origin ="1899-12-30"))
+data <- data %>%
+    mutate(fechafinal = dmy(fecha_final))
+data <- data %>%
+    mutate(fecha = paste(fechanumerica,fechafinal,sep=""))
+data <- data %>%
+    mutate(fecha = gsub("NA","",fecha))
+data <- data %>%
+    mutate(fecha = ymd(fecha))
+data <- data %>%
+    mutate(dia = day(hora_final))
+data <- data %>% 
+  mutate(fecha = case_when(dia == 1 ~ fecha + ddays(x=1),
+                           dia == 31 ~ fecha))
+data <- data %>%
+    mutate(fecha_final = make_datetime(year(fecha),
+                                      month(fecha),
+                                      day(fecha),
+                                      hour(hora_final),
+                                      minute(hora_final), 
+                                      second(hora_final)))
+data <- data %>%
+  select(-c("fecha", "fechanumerica", "fechafinal", "hora_final", "dia"))
+```
+
+
+```{r}
+data %>%
+  select(cod, fecha_creacion) %>%
+  mutate(n = month(fecha_creacion))%>%
+  group_by(cod, n)
 ```
 
 
@@ -46,13 +102,67 @@ View(data)
 
 ```{r}
 signo <- function(fcumple){
-  fcumple <- mdy(fcumple)
-  if(fcumple ){
-    
-  }
+  fcumple <- ymd(as.character(as.Date(fcumple,format="%B %d")))
+  
+  info_zodiaco <- data.frame(
+    mes = c("March", "April", "May", "June", "July", "August", "September", 
+            "October", "November", "December", "January", "February"),
+    dias = c(21, 20, 21, 21, 23, 23, 23, 23, 22, 22, 20, 19),
+    abajo_dia = c("Piscis", "Aries", "Tauro", "Gemini", "Cancer", "Leo", 
+                  "Virgo", "Libra", "Escorpio", "Sagitario", "Capricornio", "Acuario"),
+    arriba_dia = c("Aries","Tauro","Gemini","Cancer","Leo","Virgo","Libra"
+                   ,"Scorpio","Sagitario","Capricornio","Acuario", "Piscis"),
+    stringsAsFactors = FALSE
+  )
+  
+  mes_df <- info_zodiaco[info_zodiaco$mes == months(fcumple), ] 
+
+
+  signo_zodiaco <- ifelse(day(fcumple) >= mes_df$dia, mes_df$arriba_dia, mes_df$abajo_dia)  
+
+  return(signo_zodiaco)
 }
+
+signo("December 3rd")
+```
+
+
+# Flights
+
+```{r}
+# cuatro columnas con fecha y hora
+flights$date <- as.Date(with(flights, paste(year, month, day,sep="-")), "%Y-%m-%d")
+   flights$date
+
+flights$Newdep_time <- format(strptime(sprintf('%04d',flights$dep_time),format = '%H%M')
+                               ,'%H:%M')
+flights$Newarr_time <- format(strptime(sprintf('%04d',flights$arr_time), format = '%H%M'),
+                               '%H:%M')
+flights$Newsched_dep_time <- format(strptime(sprintf('%04d',flights$sched_dep_time), format = '%H%M'),
+                               '%H:%M')
+flights$Newsched_arr_time <- format(strptime(sprintf('%04d',flights$sched_arr_time), format = '%H%M'),
+                              '%H:%M')
+flights$Newdep_time <- as.POSIXct(paste(flights$date, flights$Newdep_time), 
+                            format = "%Y-%m-%d %H:%M")
+flights$Newarr_time <- as.POSIXct(paste(flights$date, flights$Newarr_time), 
+                            format = "%Y-%m-%d %H:%M")
+flights$Newsched_dep_time <- as.POSIXct(paste(flights$date, flights$Newsched_dep_time), 
+                            format = "%Y-%m-%d %H:%M")
+flights$Newsched_arr_time <- as.POSIXct(paste(flights$date, flights$Newsched_arr_time), 
+                            format = "%Y-%m-%d %H:%M")
+flights
+```
+
+
+```{r}
+# cuanto tiempo de delay tiene cada vuelo
+
+flights$DepartureDelay<-flights$Newdep_time - flights$Newsched_dep_time
+flights$ArrDelay <- flights$Newarr_time - flights$Newsched_arr_time
+flights$TotalDelay <- flights$DepartureDelay + flights$ArrDelay
+flights
 ```
 
 
 
-# Flights
+
