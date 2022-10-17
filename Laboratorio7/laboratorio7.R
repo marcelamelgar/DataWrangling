@@ -255,4 +255,18 @@ gananciaVehiculo <- data %>%
   hc_title(text = "<b>Ganancias Segun medio de Transporte.</b>") %>%
   hc_subtitle(text = "<i>El tipo de vehiculo que mas ganancias aporta es el Pickup.</i>")
 gananciaVehiculo
+
+# vehiculo por centro
+vehiculocentro <- data %>%
+  select(Vehiculo, origen, Cod)%>%
+  group_by(Vehiculo, origen)%>%
+  summarise(codcentro = n())%>%
+  filter(origen %in% c('150224','150277','150278','150841'))
+
+ggplot(vehiculocentro, aes(fill=Vehiculo, y=codcentro, x=origen)) + 
+  geom_bar(position="stack", stat="identity")+
+  xlab("Centro de Origen")+
+  ylab("Cantidad de Operaciones")+
+  ggtitle("Vehiculos utilizados en operaciones por Centro de Distribucion")
+
   
