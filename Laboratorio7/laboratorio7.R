@@ -109,6 +109,7 @@ ggplot(tipoOperacionMes, aes(fill=Cod, y=tipoOperacionMes$operaciones, x=tipoOpe
   ggtitle("Tipo de servicio realizado por mes.")
 
 # postes mas problematicos
+noPostes$ID <- as.character(noPostes$ID)
 problematicos <- noPostes %>%
   select(ID, n) %>%
   arrange(-n) %>%
@@ -118,6 +119,8 @@ problematicos <- noPostes %>%
   hc_subtitle(text = "<i>El poste con mas servicios realizados durante el año 2017 fue 477971.</i>")
 problematicos
 
+aveProblemas <- mean(noPostes$n)
+
 # postes problematicos segun 
 completo <- data %>%
   select(ID,Cod)%>%
@@ -125,6 +128,7 @@ completo <- data %>%
   summarise(operaciones = n())%>%
   filter(ID %in% c(337161,477971,773607,863979,969156))
 
+completo$ID <- as.character(completo$ID)
 ggplot(completo, aes(fill=Cod, y=completo$operaciones, x=completo$ID)) + 
   geom_bar(position="stack", stat="identity")+
   xlab("Poste")+
@@ -140,7 +144,7 @@ ggplot(recurrencia, aes(y=n, x=origen)) +
   geom_bar(position="stack", stat="identity")+
   xlab("Centro de Distribucion")+
   ylab("Origen de Operaciones")+
-  ggtitle("Recurrencia de Opereaciones por Centro de Distribucion.")
+  ggtitle("Recurrencia de Operaciones por Centro de Distribucion.")
 
 # cod por centro de distribucion
 data$origen <- as.character(data$origen)
@@ -148,6 +152,12 @@ codCentro <- data %>%
   select(origen, Cod) %>%
   group_by(origen,Cod) %>%
   summarise(operaciones = n())
+
+ggplot(codCentro, aes(fill=Cod, y=operaciones, x=origen)) + 
+  geom_bar(position="stack", stat="identity")+
+  xlab("Centro de Origen")+
+  ylab("Cantidad de Operaciones")+
+  ggtitle("Tipo de Servicio realizado por Centro de Distribucion.")
   
 # vehiculo mas recurrido
 vehiculos <- data %>%
